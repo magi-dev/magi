@@ -8,7 +8,7 @@ software written by Thomas Bernard.
 UNIX BUILD NOTES
 ================
 
-It is recommeded to use Berkeley DB 4.8 for building Magi wallet (see the following instructions) as well as OpenSSL 1.0.x. 
+It is recommeded to use Berkeley DB 4.8 for building Magi wallet (see the following instructions) as well as OpenSSL 1.1.x. 
 
 Build magid
 ================
@@ -16,24 +16,31 @@ Build magid
 To Build On i386, amd64
 --------
 	cd src/
-	make -f makefile.unix                          # Headless magi
+	../contrib/bdb/install_db4.8.sh
+	make -f makefile.unix                           # Headless magi
 
 To Build On armv6l
 --------
 	cd src/
+        ../contrib/bdb/install_db4.8.sh
 	make -f makefile.unix xCPUARCH=armv6l           # Headless magi
 
 To Build On armv7l
 --------
 	cd src/
+        ../contrib/bdb/install_db4.8.sh
 	make -f makefile.unix xCPUARCH=armv7l           # Headless magi
 
 To Build On aarch64
 --------
 	cd src/
-	make -f makefile.unix xCPUARCH=aarch64           # Headless magi
+        ../contrib/bdb/install_db4.8.sh
+	make -f makefile.unix xCPUARCH=aarch64          # Headless magi
 
-The release is built with GCC and then "strip bitcoind" to strip the debug symbols, which reduces the executable size by about 90%.
+The release is built with GCC  
+Run `strip magid` to strip the debug symbols, which reduces the executable size by about 90%.
+
+To install berkeley-db to a custom location, use `../contrib/bdb/install_db4.8.sh /path/to/bdb`. To build magid using that path, run `make -f makefile.unix BDB_PATH=/path/to/bdb`.
 
 Build magi-qt
 ================

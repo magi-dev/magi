@@ -73,3 +73,7 @@ m-wallet-linux*
 m-wallet-osx*
 m-wallet-win*
 m-wallet-static*
+
+# Dependencies
+depends/build/*
+depends/build

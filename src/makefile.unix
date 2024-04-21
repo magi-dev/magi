@@ -30,8 +30,16 @@ else
 	TESTDEFS += -DBOOST_TEST_DYN_LINK
 endif
 
-DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/hash $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH)) $(OPT_INCLUDE_PATHS)
-LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH))
+BDB_LIB_PATH ?= $(dir $(CURDIR))depends/build/bdb/lib
+BDB_INCLUDE_PATH ?= $(dir $(CURDIR))depends/build/bdb/include
+
+ifdef BDB_PATH
+    BDB_LIB_PATH := $(BDB_PATH)/lib
+    BDB_INCLUDE_PATH := $(BDB_PATH)/include
+endif
+
+DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/hash $(CURDIR)/obj $(BDB_INCLUDE_PATH)) $(OPT_INCLUDE_PATHS)
+LIBS = $(addprefix -L,$(BDB_LIB_PATH))
 
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
