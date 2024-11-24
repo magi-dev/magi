@@ -39,10 +39,36 @@
 #define ARCH_CPU_ARM64_FAMILY 1
 #elif defined(__ppc__) || defined(__powerpc__) || defined(__powerpc64__)
 #define ARCH_CPU_PPC_FAMILY 1
+#elif defined(__mips__)
+#define ARCH_CPU_MIPS_FAMILY 1
 #endif
 
 namespace leveldb {
 namespace port {
+
+// AtomicPointer based on <cstdatomic> if available
+#if defined(LEVELDB_ATOMIC_PRESENT)
+class AtomicPointer {
+ private:
+  std::atomic<void*> rep_;
+ public:
+  AtomicPointer() { }
+  explicit AtomicPointer(void* v) : rep_(v) { }
+  inline void* Acquire_Load() const {
+    return rep_.load(std::memory_order_acquire);
+  }
+  inline void Release_Store(void* v) {
+    rep_.store(v, std::memory_order_release);
+  }
+  inline void* NoBarrier_Load() const {
+    return rep_.load(std::memory_order_relaxed);
+  }
+  inline void NoBarrier_Store(void* v) {
+    rep_.store(v, std::memory_order_relaxed);
+  }
+};
+
+#else
 
 // Define MemoryBarrier() if available
 // Windows on x86
@@ -110,6 +136,13 @@ inline void MemoryBarrier() {
 }
 #define LEVELDB_HAVE_MEMORY_BARRIER
 
+// MIPS
+#elif defined(ARCH_CPU_MIPS_FAMILY) && defined(__GNUC__)
+inline void MemoryBarrier() {
+  __asm__ __volatile__("sync" : : : "memory");
+}
+#define LEVELDB_HAVE_MEMORY_BARRIER
+
 #endif
 
 // AtomicPointer built using platform-specific MemoryBarrier()
@@ -130,28 +163,6 @@ class AtomicPointer {
   inline void Release_Store(void* v) {
     MemoryBarrier();
     rep_ = v;
-  }
-};
-
-// AtomicPointer based on <cstdatomic>
-#elif defined(LEVELDB_ATOMIC_PRESENT)
-class AtomicPointer {
- private:
-  std::atomic<void*> rep_;
- public:
-  AtomicPointer() { }
-  explicit AtomicPointer(void* v) : rep_(v) { }
-  inline void* Acquire_Load() const {
-    return rep_.load(std::memory_order_acquire);
-  }
-  inline void Release_Store(void* v) {
-    rep_.store(v, std::memory_order_release);
-  }
-  inline void* NoBarrier_Load() const {
-    return rep_.load(std::memory_order_relaxed);
-  }
-  inline void NoBarrier_Store(void* v) {
-    rep_.store(v, std::memory_order_relaxed);
   }
 };
 
@@ -220,10 +231,12 @@ class AtomicPointer {
 #error Please implement AtomicPointer for this platform.
 
 #endif
+#endif
 
 #undef LEVELDB_HAVE_MEMORY_BARRIER
 #undef ARCH_CPU_X86_FAMILY
 #undef ARCH_CPU_ARM_FAMILY
+#undef ARCH_CPU_ARM64_FAMILY
 #undef ARCH_CPU_PPC_FAMILY
 
 }  // namespace port
