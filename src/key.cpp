@@ -335,7 +335,10 @@ bool CKey::SignCompact(uint256 hash, std::vector<unsigned char>& vchSig)
         }
 
         if (nRecId == -1)
+        {
+            ECDSA_SIG_free(sig);
             throw key_error("CKey::SignCompact() : unable to construct recoverable key");
+        }
 
         vchSig[0] = nRecId+27+(fCompressedPubKey ? 4 : 0);
         ECDSA_SIG_get0(sig, (const BIGNUM **)&r, (const BIGNUM **)&s);
@@ -378,6 +381,7 @@ bool CKey::SetCompactSignature(uint256 hash, const std::vector<unsigned char>& v
         ECDSA_SIG_free(sig);
         return true;
     }
+    ECDSA_SIG_free(sig);
     return false;
 }
 
