@@ -11,9 +11,12 @@
 
 //#define BOOST_SPIRIT_THREADSAFE  // uncomment for multithreaded use, requires linking to boost.thread
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/version.hpp>
+#include <boost/bind/placeholders.hpp>
+
+using namespace boost::placeholders;
 
 #if BOOST_VERSION >= 103800
     #include <boost/spirit/include/classic_core.hpp>
