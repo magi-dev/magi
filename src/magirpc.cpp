@@ -14,7 +14,7 @@
 #undef printf
 #include <boost/asio.hpp>
 #include <boost/asio/ip/v6_only.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
 #include <boost/iostreams/concepts.hpp>
@@ -24,6 +24,7 @@
 #include <boost/asio/ssl.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/bind/placeholders.hpp>
 #include <list>
 
 #define printf OutputDebugStringF
@@ -32,6 +33,7 @@ using namespace std;
 using namespace boost;
 using namespace boost::asio;
 using namespace json_spirit;
+using namespace boost::placeholders;
 
 void ThreadRPCServer2(void* parg);
 
