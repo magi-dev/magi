@@ -21,19 +21,20 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 # Dependency library locations can be customized using following settings 
 # winbuild dependencies
 win32 {
-#    BOOST_LIB_SUFFIX=-mgw49-mt-s-1_58
-    BOOST_INCLUDE_PATH=$$DEPSDIR/boost_1_58_0
-    BOOST_LIB_PATH=$$DEPSDIR/boost_1_58_0/stage/lib
-    BDB_INCLUDE_PATH=$$DEPSDIR/db-4.8.30.NC/build_unix
-    BDB_LIB_PATH=$$DEPSDIR/db-4.8.30.NC/build_unix
-    OPENSSL_INCLUDE_PATH=$$DEPSDIR/openssl-1.0.2j/include
-    OPENSSL_LIB_PATH=$$DEPSDIR/openssl-1.0.2j
-    MINIUPNPC_INCLUDE_PATH=$$DEPSDIR/miniupnpc
-    MINIUPNPC_LIB_PATH=$$DEPSDIR/miniupnpc
-    QRENCODE_INCLUDE_PATH=$$DEPSDIR/qrencode-3.4.3
-    QRENCODE_LIB_PATH=$$DEPSDIR/qrencode-3.4.3/.libs
-    GMP_INCLUDE_PATH=$$DEPSDIR/gmp-6.0.0
-    GMP_LIB_PATH=$$DEPSDIR/gmp-6.0.0/.libs
+    BOOST_LIB_SUFFIX=-mt-s
+    BOOST_THREAD_LIB_SUFFIX=_win32-mt-s
+    BOOST_INCLUDE_PATH=depends/x86_64-w64-mingw32/include/boost
+    BOOST_LIB_PATH=depends/x86_64-w64-mingw32/lib
+    BDB_INCLUDE_PATH=depends/x86_64-w64-mingw32/include
+    BDB_LIB_PATH=depends/x86_64-w64-mingw32/lib
+    OPENSSL_INCLUDE_PATH=depends/x86_64-w64-mingw32/include
+    OPENSSL_LIB_PATH=depends/x86_64-w64-mingw32/lib
+    MINIUPNPC_INCLUDE_PATH=depends/x86_64-w64-mingw32/include/miniupnpc
+    MINIUPNPC_LIB_PATH=depends/x86_64-w64-mingw32/lib
+    QRENCODE_INCLUDE_PATH=depends/x86_64-w64-mingw32/include
+    QRENCODE_LIB_PATH=depends/x86_64-w64-mingw32/lib
+    GMP_INCLUDE_PATH=depends/x86_64-w64-mingw32/include
+    GMP_LIB_PATH=depends/x86_64-w64-mingw32/lib
 }
 
 OBJECTS_DIR = build
@@ -82,7 +83,7 @@ contains(USE_UPNP, -) {
     count(USE_UPNP, 0) {
         USE_UPNP=1
     }
-    DEFINES += USE_UPNP=$$USE_UPNP STATICLIB
+    DEFINES += USE_UPNP=$$USE_UPNP MINIUPNP_STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
     LIBS += $$join(MINIUPNPC_LIB_PATH,,-L,) -lminiupnpc
     win32:LIBS += -liphlpapi
@@ -373,7 +374,7 @@ CODECFORTR = UTF-8
 TRANSLATIONS = $$files(src/qt/locale/bitcoin_*.ts)
 
 isEmpty(QMAKE_LRELEASE) {
-    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\\lrelease.exe
+    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
     else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
 }
 isEmpty(QM_DIR):QM_DIR = $$PWD/src/qt/locale
@@ -398,7 +399,7 @@ OTHER_FILES += README.md \
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
     macx:BOOST_LIB_SUFFIX = -mt-s
-    windows:BOOST_LIB_SUFFIX = -mgw49-mt-s-1_58
+    windows:BOOST_LIB_SUFFIX = -mt-s
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {
