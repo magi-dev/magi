@@ -4,29 +4,30 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-CXX ?= g++
+CXX ?= x86_64-w64-mingw32-g++
 
 USE_UPNP:=-
 USE_IPV6:=1
 
 #DEPSDIR?=/usr/local
-#BOOST_SUFFIX?=-mgw49-mt-s-1_58
+BOOST_SUFFIX?=-mt-s
+BOOST_THREAD_LIB_SUFFIX=_win32-mt-s
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
- -I"$(DEPSDIR)/boost_1_58_0" \
- -I"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
- -I"$(DEPSDIR)/miniupnpc" \
- -I"$(DEPSDIR)/gmp-6.0.0" \
- -I"$(DEPSDIR)/openssl-1.0.2j/include"
+ -I"../depends/x86_64-w64-mingw32/include/boost" \
+ -I"../depends/x86_64-w64-mingw32/include" \
+ -I"../depends/x86_64-w64-mingw32/include/miniupnpc" \
+ -I"../depends/x86_64-w64-mingw32/include" \
+ -I"../depends/x86_64-w64-mingw32/include/openssl"
 
 LIBPATHS= \
  -L"$(CURDIR)/leveldb" \
- -L"$(DEPSDIR)/boost_1_58_0/stage/lib" \
- -L"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
- -L"$(DEPSDIR)/miniupnpc" \
- -L"$(DEPSDIR)/gmp-6.0.0/.libs" \
- -L"$(DEPSDIR)/openssl-1.0.2j"
+ -L"../depends/x86_64-w64-mingw32/lib" \
+ -L"../depends/x86_64-w64-mingw32/lib" \
+ -L"../depends/x86_64-w64-mingw32/lib" \
+ -L"../depends/x86_64-w64-mingw32/lib" \
+ -L"../depends/x86_64-w64-mingw32/lib"
  
 LIBS= \
  -l leveldb \
@@ -34,7 +35,7 @@ LIBS= \
  -l boost_system$(BOOST_SUFFIX) \
  -l boost_filesystem$(BOOST_SUFFIX) \
  -l boost_program_options$(BOOST_SUFFIX) \
- -l boost_thread$(BOOST_SUFFIX) \
+ -l boost_thread$(BOOST_THREAD_LIB_SUFFIX) \
  -l boost_chrono$(BOOST_SUFFIX) \
  -l db_cxx \
  -l ssl \
@@ -55,10 +56,10 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
- INCLUDEPATHS += -I"C:\miniupnpc-1.6-mgw"
- LIBPATHS += -L"C:\miniupnpc-1.6-mgw"
+ INCLUDEPATHS += -I"../depends/x86_64-w64-mingw32/include/miniupnpc"
+ LIBPATHS += -L"../depends/x86_64-w64-mingw32/lib"
  LIBS += -l miniupnpc -l iphlpapi
- DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
+ DEFS += -MINIUPNP_STATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
 
 ifneq (${USE_IPV6}, -)
@@ -125,27 +126,27 @@ DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
 #    cd leveldb && $(MAKE) CC=$(CC) CXX=$(CXX) OPT="$(CFLAGS)" TARGET_OS=NATIVE_WINDOWS libleveldb.a libmemenv.a && cd ..
 
 obj/%.o: %.cpp $(HEADERS)
-	g++ -c $(CFLAGS) -o $@ $<
+	x86_64-w64-mingw32-g++ -c $(CFLAGS) -o $@ $<
 
 obj/%.o: %.c $(HEADERS)
 	$(CXX) -c $(CFLAGS) -fpermissive -o $@ $<
 
 obj/%.o: hash/%.cpp $(HEADERS)
-	g++ -c $(CFLAGS) -o $@ $<
+	x86_64-w64-mingw32-g++ -c $(CFLAGS) -o $@ $<
 
 obj/%.o: hash/%.c $(HEADERS)
 	$(CXX) -c $(CFLAGS) -fpermissive -o $@ $<
 
 magid.exe: $(OBJS:obj/%=obj/%)
-	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
+	x86_64-w64-mingw32-g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 
 obj-test/%.o: test/%.cpp $(HEADERS)
-	g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
+	x86_64-w64-mingw32-g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
 test_magi.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
-	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
+	x86_64-w64-mingw32-g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
 
 clean:
 	-del /Q magid.exe test_magi.exe
