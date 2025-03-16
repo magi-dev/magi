@@ -57,7 +57,7 @@ const struct {
 #define QAPP_APP_NAME_DEFAULT "m-wallet"
 #define QAPP_APP_NAME_TESTNET "m-wallet-testnet"
 
-#define QAPP_URL_SOURCE_CODE "https://github.com/magi-project/magi"
+#define QAPP_URL_SOURCE_CODE "https://github.com/magi-dev/magi"
 #define QAPP_URL_WEBSITE "http://m-core.org"
 
 #endif // GUICONSTANTS_H
