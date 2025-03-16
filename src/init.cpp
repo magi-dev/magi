@@ -906,8 +906,8 @@ bool AppInit2()
 
 std::string LicenseInfo(bool f1, bool f2)
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/magi-project/magi>";
-    const std::string URL_WEBSITE = "<http://m-core.org>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/magi-dev/magi>";
+    const std::string URL_WEBSITE = "<https://magicoin.de>";
     const std::string additionalInfo = "Magi (XMG) is an online payment system, enabling instant payments to anyone in the world without using an intermediary. Magi coins can be minted by computational devices including personal computers and portable devices through mPoW and mPoS. Magi aims at fairness, cost effective and energy efficiency during coin minting.";
 
     return ( (f1 ? (std::string(BTC_COPYRIGHT_STR) + "\n" + std::string(PPC_COPYRIGHT_STR) + "\n") : "") + 
@@ -917,8 +917,8 @@ std::string LicenseInfo(bool f1, bool f2)
         strprintf(_("Please contribute if you find %s useful. Visit %s for further information about the software. "), PACKAGE_NAME,URL_WEBSITE.c_str()) +
         "\n\n" + 
         strprintf(_("Source code: %s"), URL_SOURCE_CODE.c_str()) + "\n" + 
-        strprintf(_("Dowloand wallet: %s"), "<http://m-core.org/bin>") + "\n" + 
-        strprintf(_("Block-Chain: %s"), "<http://m-core.org/bin/block-chain>") + "\n" + 
+        strprintf(_("Dowloand wallet: %s"), "<https://github.com/magi-dev/magi/releases>") + "\n" + 
+        strprintf(_("Block-Chain: %s"), "<https://chain.magicoin.de>") + "\n" + 
         strprintf(_("Roadmap: %s"), "<http://m-core.org/resources/roadmap>") + "\n" + 
         "\n" + 
         _("This is experimental software.") + 
