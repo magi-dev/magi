@@ -1,0 +1,45 @@
+name: Magi build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install wget curl build-essential libssl-dev libgmp-dev libminiupnpc-dev libboost-all-dev libprotobuf-dev libqrencode-dev qtbase5-dev qt5-qmake qttools5-dev-tools -y
+      - name: Install BerkelyDB
+        run: |
+          wget https://github.com/BastelPichi/berkely-db-fixed/releases/download/fix/db-4.8.30.NC.tar.gz
+          tar xf db-4.8.30.NC.tar.gz
+          cd db-4.8.30.NC/build_unix
+          ../dist/configure -q --disable-shared --enable-cxx --disable-replication --with-pic
+          make
+          sudo make install
+          
+      - name: Compile M-Wallet
+        run: |
+          cd $HOME/work/magi/magi/
+          qmake "USE_UPNP=1" "USE_DBUS=1" BDB_INCLUDE_PATH=/usr/local/BerkeleyDB.4.8/include BDB_LIB_PATH=/usr/local/BerkeleyDB.4.8/lib
+          make
+
+      - name: Compile Magi
+        run: |
+          cd $HOME/work/magi/magi/src
+          export BDB_LIB_PATH=/usr/local/BerkeleyDB.4.8/lib
+          export BDB_INCLUDE_PATH=/usr/local/BerkeleyDB.4.8/include
+          make -f makefile.unix STATIC=1
+          strip magid
+
+          
+      - name: Upload
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: magid-dev
+          path: |
+            /home/runner/work/magi/magi/src/magid
+            /home/runner/work/magi/magi/m-wallet
