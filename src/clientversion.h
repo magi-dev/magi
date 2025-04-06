@@ -8,8 +8,8 @@
 // These need to be macros, as version.cpp's and magi-qt.rc's voodoo requires it
 #define CLIENT_VERSION_MAJOR       1
 #define CLIENT_VERSION_MINOR       4
-#define CLIENT_VERSION_REVISION    7
-#define CLIENT_VERSION_BUILD       2
+#define CLIENT_VERSION_REVISION    8
+#define CLIENT_VERSION_BUILD       3
 
 // Set to true for release, false for prerelease or test build
 #define CLIENT_VERSION_IS_RELEASE  true
@@ -17,7 +17,7 @@
 
 // Version before stable release: ALPHA1 ~ ALPHA3, BETA1 ~ BETA3, RC1 ~ RC3
 // Set to "STABLE" for stable release
-#define CLIENT_VERSION_RELEASE_CANDIDATE "RC1"
+#define CLIENT_VERSION_RELEASE_CANDIDATE "STABLE"
 
 /**
  * Copyright year (2009-this)
