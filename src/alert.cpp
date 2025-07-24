@@ -16,6 +16,9 @@ using namespace std;
 map<uint256, CAlert> mapAlerts;
 CCriticalSection cs_mapAlerts;
 
+// The "keys" are not real cryptographic keys.
+// They are simply the hex encoding of the text:
+// "private keys will be deleted and can never be used jondow"
 static const char* pszMainKey = "046ba5ebf91d9c0970726976617465206b6579732077696c6c2062652064656c6574656420616e642063616e206e657665722062652075736564206a6f6e646f77";
 
 // TestNet alerts pubKey
